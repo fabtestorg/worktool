@@ -1,4 +1,4 @@
-#!/bin/bash +x
+#!/bin/bash
 #
 # Copyright IBM Corp. All Rights Reserved.
 #
