@@ -26,7 +26,9 @@ CCPATH="github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02"
 #CCPATH="github.com/peersafe/factoring/chaincode"
 CCPACKAGE="factor.out"
 INITARGS='{"Args":["init","a","100","b","200"]}'
-TESTARGS='{"Args":["DslQuery","trackid","{\"dslSyntax\":\"{\\\"selector\\\":{\\\"sender\\\":\\\"zhengfu0\\\"}}\"}"]}'
+TESTARGS='{"Args":["query","a"]}'
+TESTARGS='{"Args":["invoke","a","b","1"]}'
+#TESTARGS='{"Args":["DslQuery","trackid","{\"dslSyntax\":\"{\\\"selector\\\":{\\\"sender\\\":\\\"zhengfu0\\\"}}\"}"]}'
 
 ORDERER_CA="$PWD/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
 POLICY="OR  ('Org1MSP.member','Org2MSP.member')"
@@ -219,7 +221,12 @@ exit
         exit 1
 	fi
     setGlobals 0
-    $PEER chaincode query -C $CHANNEL_NAME -n $CCNAME -c $TESTARGS
+    #$PEER chaincode query -C $CHANNEL_NAME -n $CCNAME -c $TESTARGS
+    if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
+        $PEER chaincode invoke -o $ORDERADDRESS -C $CHANNEL_NAME -n $CCNAME -c $TESTARGS
+    else
+        $PEER chaincode invoke -o $ORDERADDRESS -C $CHANNEL_NAME -n $CCNAME -c $TESTARGS --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA
+    fi
 }
 
 5_MakePackage () {
