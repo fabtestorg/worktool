@@ -36,6 +36,7 @@ POLICY="OR  ('Org1MSP.member','Org2MSP.member')"
 #peer 需要用到的依赖
 PEER=$PWD/bin/peer
 export FABRIC_CFG_PATH=$PWD
+export BCCSP_CRYPTO_TYPE=GM
 
 setGlobals () {
     if [ $1 -eq 0 -o $1 -eq 1 ] ; then

@@ -14,6 +14,7 @@ echo $CHANNEL_NAME
 
 export FABRIC_ROOT=$PWD
 export FABRIC_CFG_PATH=$PWD
+export BCCSP_CRYPTO_TYPE=GM
 echo
 
 BINPATH=$PWD/bin
@@ -81,6 +82,6 @@ function generateChannelArtifacts() {
 	echo
 }
 
-generateCerts
+#generateCerts
 generateChannelArtifacts
 
