@@ -7,7 +7,7 @@ version: '2'
 
 services:
   zookeeper:
-    image: hyperledger/fabric-zookeeper
+    image: peersafes/fabric-zookeeper:1.0.4-gm
     restart: always
     ports:
       - '2181'
@@ -15,7 +15,7 @@ services:
       - '3888'
 
   kafka:
-    image: hyperledger/fabric-kafka
+    image: peersafes/fabric-kafka:1.0.4-gm
     restart: always
     environment:
       - KAFKA_MESSAGE_MAX_BYTES=103809024 # 99 * 1024 * 1024 B
@@ -26,7 +26,7 @@ services:
 
   orderer.example.com:
     container_name: orderer.example.com
-    image: hyperledger/fabric-orderer
+    image: peersafes/fabric-orderer:1.0.4-gm
     environment:
       - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
