@@ -82,6 +82,6 @@ function generateChannelArtifacts() {
 	echo
 }
 
-#generateCerts
+generateCerts
 generateChannelArtifacts
 
