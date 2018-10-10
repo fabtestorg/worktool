@@ -1,0 +1,37 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+services:
+  orderca:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+    ports:
+      - "7055:7054"
+    command: sh -c 'fabric-ca-server start -b Admin@example.com:adminpw -d'
+    volumes:
+      - ./server/example.com:/etc/hyperledger/fabric-ca-server
+
+  org1ca:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+    ports:
+      - "7056:7054"
+    command: sh -c 'fabric-ca-server start -b Admin@org1.example.com:adminpw  -d'
+    volumes:
+      - ./server/org1.example.com:/etc/hyperledger/fabric-ca-server
+
+  org2ca:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+    ports:
+      - "7057:7054"
+    command: sh -c 'fabric-ca-server start -b Admin@org2.example.com:adminpw -d'
+    volumes:
+      - ./server/org2.example.com:/etc/hyperledger/fabric-ca-server
