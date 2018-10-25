@@ -22,8 +22,8 @@ CHANNEL_NAME="mychannel"
 #如果是动态增加channel，请将CHANNEL_NAME的变量设置为"channel1"
 CCNAME="factor"
 CCVERSION=$2
-#CCPATH="github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02"
-CCPATH="github.com/peersafe/factoring/chaincode"
+CCPATH="github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02"
+#CCPATH="github.com/peersafe/factoring/chaincode"
 CCPACKAGE="factor.out"
 INITARGS='{"Args":["init","a","100","b","200"]}'
 TESTARGS='{"Args":["query","a"]}'
@@ -90,6 +90,7 @@ setGlobals () {
     fi
 
     echo "*******************all peer join channel*************************"
+
     for ch in 0; do
         setGlobals $ch
         $PEER channel join -b $CHANNEL_NAME.block
@@ -97,7 +98,6 @@ setGlobals () {
         sleep 2
         echo
     done
-
     echo "*****************org1 and org2  update anchorPeer**************"
     for ch in 0; do
         setGlobals $ch
@@ -251,7 +251,24 @@ exit
     echo "=====================CoucdDB localhost:'$ch'984 setIndex success! ===================== "
     done
 }
-
+7_fetchBlock () {
+    #Use orderer's MSP for fetching system channel config block
+    echo $1
+    if [ "$1" == "testchainid" ]; then
+        echo "fetch testchianid"
+        CHANNEL_NAME=$1
+        CORE_PEER_LOCALMSPID="OrdererMSP"
+	    CORE_PEER_TLS_ROOTCERT_FILE=$ORDERER_CA
+	    CORE_PEER_MSPCONFIGPATH=$PWD/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp
+	    export CORE_PEER_LOCALMSPID
+	    export CORE_PEER_TLS_ROOTCERT_FILE
+	    export CORE_PEER_MSPCONFIGPATH
+    else
+        setGlobals 0
+    fi
+    echo $CHANNEL_NAME
+    $PEER channel fetch 0 ${CHANNEL_NAME}_block.pb -o $ORDERADDRESS -c $CHANNEL_NAME --tls --cafile $ORDERER_CA
+}
 echo
 echo "#################################################################"
 echo "#######    TLS is $CORE_PEER_TLS_ENABLED   ##########"
@@ -268,6 +285,8 @@ elif [ $1 -eq 5 ]; then
     5_MakePackage
 elif [ $1 -eq 6 ]; then
     6_CouchDBSetIndex
+elif [ $1 -eq 7 ]; then
+    7_fetchBlock $2
 else
     echo "Command Error  channel   eg: ./worktool.sh 1"
     echo "Command Error  deploy cc        eg: ./worktool.sh 2 1.0"
@@ -275,5 +294,7 @@ else
     echo "Command Error  test cc          eg: ./worktool.sh 4"
     echo "Command Error  only make package   eg: ./worktool.sh 5 1.0"
     echo "Command Error  couchdb set sortIndex   eg: ./worktool.sh 6"
+    echo "Command Error  fetch block  eg: ./worktool.sh 7 testchainid"
     exit
 fi
+
