@@ -18,16 +18,18 @@ if [ "$CORE_PEER_TLS_ENABLED" = "true" ]; then
     ORDERADDRESS="orderer.example.com:7050"
 fi
 TEMPID=$3
-CHANNEL_NAME="mychannel"
+
+#CHANNEL_NAME="mychannel"
+CHANNEL_NAME=$2
 #如果是动态增加channel，请将CHANNEL_NAME的变量设置为"channel1"
-CCNAME="factor"
+CCNAME="sscc"
 CCVERSION=$2
 CCPATH="github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02"
 #CCPATH="github.com/peersafe/factoring/chaincode"
 CCPACKAGE="factor.out"
 INITARGS='{"Args":["init","a","100","b","200"]}'
 TESTARGS='{"Args":["query","a"]}'
-TESTARGS='{"Args":["invoke","a","b","1"]}'
+TESTARGS='{"Args":["joinchan","mychannel1"]}'
 #TESTARGS='{"Args":["DslQuery","trackid","{\"dslSyntax\":\"{\\\"selector\\\":{\\\"sender\\\":\\\"zhengfu0\\\"}}\"}"]}'
 
 ORDERER_CA="$PWD/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
@@ -87,17 +89,20 @@ setGlobals () {
         $PEER channel create -o $ORDERADDRESS -c $CHANNEL_NAME -f ./channel-artifacts/$CHANNEL_NAME.tx
     else
         $PEER channel create -o $ORDERADDRESS -c $CHANNEL_NAME -f ./channel-artifacts/$CHANNEL_NAME.tx  --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA
+       # $PEER channel create -o $ORDERADDRESS -c $CHANNEL_NAME -f ./channel-artifacts/$CHANNEL_NAME.tx --cafile $ORDERER_CA
     fi
-
-    echo "*******************all peer join channel*************************"
-
-    for ch in 0; do
-        setGlobals $ch
-        $PEER channel join -b $CHANNEL_NAME.block
-        echo "===================== PEER$ch joined on the channel \"$CHANNEL_NAME\" ===================== "
-        sleep 2
-        echo
-    done
+#exit
+#
+#    echo "*******************all peer join channel*************************"
+#
+#    for ch in 0; do
+#        setGlobals $ch
+#        $PEER channel join -b $CHANNEL_NAME.block
+#        echo "===================== PEER$ch joined on the channel \"$CHANNEL_NAME\" ===================== "
+#        sleep 2
+#        echo
+#    done
+#exit
     echo "*****************org1 and org2  update anchorPeer**************"
     for ch in 0; do
         setGlobals $ch
@@ -267,7 +272,7 @@ exit
         setGlobals 0
     fi
     echo $CHANNEL_NAME
-    $PEER channel fetch 0 ${CHANNEL_NAME}_block.pb -o $ORDERADDRESS -c $CHANNEL_NAME --tls --cafile $ORDERER_CA
+    $PEER channel fetch newest ${CHANNEL_NAME}_block.pb -o $ORDERADDRESS -c $CHANNEL_NAME --tls --cafile $ORDERER_CA
 }
 echo
 echo "#################################################################"

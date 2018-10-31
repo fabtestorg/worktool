@@ -42,6 +42,7 @@ services:
       - ORDERER_KAFKA_RETRY_SHORTINTERVAL=1s
       - ORDERER_KAFKA_RETRY_SHORTTOTAL=30s
       - ORDERER_KAFKA_VERBOSE=true
+      - ORDERER_GENERAL_PROFILE_ENABLED=true
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     volumes:
@@ -50,6 +51,7 @@ services:
     - ../crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/:/var/hyperledger/orderer/tls
     ports:
       - 7050:7050
+      - 7060:6060
 
   peer0.org1.example.com:
     container_name: peer0.org1.example.com
@@ -63,14 +65,20 @@ services:
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_ORDERER_ADDRESS=orderer.example.com:7050
+      - CORE_ORDERER_TLS_SERVERHOSTOVERRIDE=orderer.example.com
+      - CORE_ORDERER_TLS_ENABLED=true
+      - CORE_ORDERER_TLS_ROOTCERT_FILE=/var/hyperledger/tlsca.pem
     volumes:
         - /var/run/:/host/var/run/
+        - ../crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem:/var/hyperledger/tlsca.pem
         - ../crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
     ports:
       - 7051:7051
       - 7052:7052
       - 7053:7053
+      - 6060:6060
 
   peer1.org1.example.com:
     container_name: peer1.org1.example.com
