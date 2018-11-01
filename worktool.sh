@@ -28,7 +28,7 @@ CCPATH="github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02"
 CCPACKAGE="factor.out"
 INITARGS='{"Args":["init","a","100","b","200"]}'
 TESTARGS='{"Args":["query","a"]}'
-TESTARGS='{"Args":["joinchan","mychannel1"]}'
+TESTARGS='{"Args":["invoke","a","b","1"]}'
 #TESTARGS='{"Args":["DslQuery","trackid","{\"dslSyntax\":\"{\\\"selector\\\":{\\\"sender\\\":\\\"zhengfu0\\\"}}\"}"]}'
 
 ORDERER_CA="$PWD/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
