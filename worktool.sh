@@ -19,8 +19,7 @@ if [ "$CORE_PEER_TLS_ENABLED" = "true" ]; then
 fi
 TEMPID=$3
 
-#CHANNEL_NAME="mychannel"
-CHANNEL_NAME=$2
+CHANNEL_NAME="mychannel"
 #如果是动态增加channel，请将CHANNEL_NAME的变量设置为"channel1"
 CCNAME="sscc"
 CCVERSION=$2
@@ -91,18 +90,16 @@ setGlobals () {
         $PEER channel create -o $ORDERADDRESS -c $CHANNEL_NAME -f ./channel-artifacts/$CHANNEL_NAME.tx  --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA
        # $PEER channel create -o $ORDERADDRESS -c $CHANNEL_NAME -f ./channel-artifacts/$CHANNEL_NAME.tx --cafile $ORDERER_CA
     fi
-#exit
-#
-#    echo "*******************all peer join channel*************************"
-#
-#    for ch in 0; do
-#        setGlobals $ch
-#        $PEER channel join -b $CHANNEL_NAME.block
-#        echo "===================== PEER$ch joined on the channel \"$CHANNEL_NAME\" ===================== "
-#        sleep 2
-#        echo
-#    done
-#exit
+
+    echo "*******************all peer join channel*************************"
+
+    for ch in 0; do
+        setGlobals $ch
+        $PEER channel join -b $CHANNEL_NAME.block
+        echo "===================== PEER$ch joined on the channel \"$CHANNEL_NAME\" ===================== "
+        sleep 2
+        echo
+    done
     echo "*****************org1 and org2  update anchorPeer**************"
     for ch in 0; do
         setGlobals $ch
