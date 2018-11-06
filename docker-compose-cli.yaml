@@ -27,7 +27,7 @@ services:
 #    extends:
 #      file:  base/docker-compose-base.yaml
 #      service: peer0.org2.example.com
-#
+##
 #  peer1.org2.example.com:
 #    container_name: peer1.org2.example.com
 #    extends:
