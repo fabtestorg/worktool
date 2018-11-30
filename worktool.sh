@@ -2,6 +2,7 @@
 
 #set -x
 CORE_PEER_TLS_ENABLED=true
+CORE_PEER_TLS_CLIENTAUTHREQUIRED=true
 ORG1_PEER0="127.0.0.1:7051"
 ORG1_PEER1="127.0.0.1:8051"
 ORG2_PEER0="127.0.0.1:9051"
@@ -22,8 +23,8 @@ CHANNEL_NAME="mychannel"
 #如果是动态增加channel，请将CHANNEL_NAME的变量设置为"channel1"
 CCNAME="factor"
 CCVERSION=$2
-#CCPATH="github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02"
-CCPATH="github.com/peersafe/factoring/chaincode"
+CCPATH="github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02"
+#CCPATH="github.com/peersafe/factoring/chaincode"
 CCPACKAGE="factor.out"
 INITARGS='{"Args":["init","a","100","b","200"]}'
 TESTARGS='{"Args":["query","a"]}'
@@ -45,6 +46,9 @@ setGlobals () {
     CORE_PEER_TLS_KEY_FILE=$PWD/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.key
     CORE_PEER_TLS_ROOTCERT_FILE=$PWD/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
     CORE_PEER_MSPCONFIGPATH=$PWD/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+    CORE_PEER_TLS_CLIENTCERT_FILE=$PWD/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt
+    CORE_PEER_TLS_CLIENTKEY_FILE=$PWD/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.key
+
         if [ $1 -eq 0 ]; then
             CORE_PEER_ADDRESS=$ORG1_PEER0
         else
@@ -70,6 +74,10 @@ setGlobals () {
     export CORE_PEER_TLS_ENABLED
     export CORE_PEER_MSPCONFIGPATH
     export CORE_PEER_ADDRESS
+    export CORE_PEER_TLS_CLIENTCERT_FILE
+    export CORE_PEER_TLS_CLIENTKEY_FILE
+    export CORE_PEER_TLS_CLIENTAUTHREQUIRED
+
     env | grep CORE
 }
 
