@@ -24,7 +24,7 @@ CHANNEL_NAME="mychannel"
 CCNAME="factor"
 CCVERSION=$2
 CCPATH="github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02"
-#CCPATH="github.com/peersafe/factoring/chaincode"
+CCPATH="github.com/peersafe/factoring/chaincode"
 CCPACKAGE="factor.out"
 INITARGS='{"Args":["init","a","100","b","200"]}'
 TESTARGS='{"Args":["query","a"]}'
@@ -90,7 +90,6 @@ setGlobals () {
         $PEER channel create -o $ORDERADDRESS -c $CHANNEL_NAME -f ./channel-artifacts/$CHANNEL_NAME.tx  --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA
        # $PEER channel create -o $ORDERADDRESS -c $CHANNEL_NAME -f ./channel-artifacts/$CHANNEL_NAME.tx --cafile $ORDERER_CA
     fi
-exit
 
     echo "*******************all peer join channel*************************"
 
