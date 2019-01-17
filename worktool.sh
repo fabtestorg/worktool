@@ -23,7 +23,7 @@ CHANNEL_NAME="mychannel"
 #如果是动态增加channel，请将CHANNEL_NAME的变量设置为"channel1"
 CCNAME="factor"
 CCVERSION=$2
-CCPATH="github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02"
+#CCPATH="github.com/hyperledger/fabric/examples/chaincode/go/example02/cmd"
 CCPATH="github.com/peersafe/factoring/chaincode"
 CCPACKAGE="factor.out"
 INITARGS='{"Args":["init","a","100","b","200"]}'
@@ -146,8 +146,8 @@ setGlobals () {
 #        sleep 2
 #        echo
 #    done
-
-    echo "*******************instantiate chaincode only need one org*********************"
+#
+#    echo "*******************instantiate chaincode only need one org*********************"
     setGlobals 0
     if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
         $PEER chaincode instantiate -o $ORDERADDRESS -C $CHANNEL_NAME -n $CCNAME -v $CCVERSION -c $INITARGS -P "$POLICY"
