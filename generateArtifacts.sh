@@ -81,6 +81,7 @@ function generateChannelArtifacts() {
 	echo
 }
 
+rm -rf crypto-config channel-artifacts
 generateCerts
 generateChannelArtifacts
 
