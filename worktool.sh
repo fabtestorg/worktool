@@ -23,8 +23,8 @@ CHANNEL_NAME="mychannel"
 #如果是动态增加channel，请将CHANNEL_NAME的变量设置为"channel1"
 CCNAME="factor"
 CCVERSION=$2
-#CCPATH="github.com/hyperledger/fabric/examples/chaincode/go/example02/cmd"
-CCPATH="github.com/peersafe/factoring/chaincode"
+CCPATH="github.com/hyperledger/fabric/examples/chaincode/go/example02/cmd"
+#CCPATH="github.com/peersafe/factoring/chaincode"
 CCPACKAGE="factor.out"
 INITARGS='{"Args":["init","a","100","b","200"]}'
 TESTARGS='{"Args":["query","a"]}'
@@ -32,7 +32,7 @@ TESTARGS='{"Args":["invoke","a","b","1"]}'
 #TESTARGS='{"Args":["DslQuery","trackid","{\"dslSyntax\":\"{\\\"selector\\\":{\\\"sender\\\":\\\"zhengfu0\\\"}}\"}"]}'
 
 ORDERER_CA="$PWD/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
-POLICY="OR  ('Org1MSP.member','Org2MSP.member')"
+POLICY="OR  ('Org1MSP.peer','Org2MSP.peer')"
 
 #peer 需要用到的依赖
 PEER=$PWD/bin/peer
@@ -130,7 +130,7 @@ setGlobals () {
 
     echo "******************all peers install chaincode by package method***********"
     for ch in 0; do
-        setGlobals $ch
+       setGlobals $ch
         $PEER chaincode install $CCPACKAGE
         echo "===================== PEER$ch install ===================== "
         sleep 2
@@ -176,8 +176,8 @@ exit
 	    echo "miss peer"
         exit 1
 	fi
-#    setGlobals 0
-#    $PEER chaincode package -n $CCNAME -p $CCPATH -v $CCVERSION $CCPACKAGE
+    setGlobals 0
+    $PEER chaincode package -n $CCNAME -p $CCPATH -v $CCVERSION $CCPACKAGE
 
 #    echo "*********************all peers install chaincode by package method******************"
 #    for ch in 0; do
