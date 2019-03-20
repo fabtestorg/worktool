@@ -28,7 +28,7 @@ services:
     container_name: orderer.example.com
     image: hyperledger/fabric-orderer
     environment:
-      - ORDERER_GENERAL_LOGLEVEL=debug
+      - FABRIC_LOGGING_SPEC=INFO
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
       - ORDERER_GENERAL_GENESISMETHOD=file
       - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
@@ -63,6 +63,7 @@ services:
       - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
       - CORE_PEER_CHAINCODEADDRESS=peer0.org1.example.com:7052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOSTRAP=peer1.org1.example.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
       - CORE_ORDERER_ADDRESS=orderer.example.com:7050
@@ -113,6 +114,7 @@ services:
       - CORE_PEER_ADDRESS=peer0.org2.example.com:7051
       - CORE_PEER_CHAINCODEADDRESS=peer0.org2.example.com:7052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org2.example.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.example.com:7051
       - CORE_PEER_LOCALMSPID=Org2MSP
     volumes:
