@@ -25,6 +25,7 @@ CCNAME="factor"
 CCVERSION=$2
 CCPATH="github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02"
 #CCPATH="github.com/peersafe/factoring/chaincode"
+CCPATH="github.com/peersafe/peersafe/poc_shrbankproof/fabric/chaincode"
 CCPACKAGE="factor.out"
 INITARGS='{"Args":["init","a","100","b","200"]}'
 TESTARGS='{"Args":["query","a"]}'
