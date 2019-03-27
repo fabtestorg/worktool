@@ -23,9 +23,9 @@ CHANNEL_NAME="mychannel"
 #如果是动态增加channel，请将CHANNEL_NAME的变量设置为"channel1"
 CCNAME="factor"
 CCVERSION=$2
-CCPATH="github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02"
+#CCPATH="github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02"
 #CCPATH="github.com/peersafe/factoring/chaincode"
-CCPATH="github.com/peersafe/peersafe/poc_shrbankproof/fabric/chaincode"
+CCPATH="github.com/peersafe/poc_shrbanksaveproof/fabric/chaincode"
 CCPACKAGE="factor.out"
 INITARGS='{"Args":["init","a","100","b","200"]}'
 TESTARGS='{"Args":["query","a"]}'
