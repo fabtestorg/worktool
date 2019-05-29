@@ -25,10 +25,12 @@ CCNAME="factor"
 CCVERSION=$2
 CCPATH="github.com/hyperledger/fabric/examples/chaincode/go/example02/cmd"
 #CCPATH="github.com/peersafe/factoring/chaincode"
+CCPATH="github.com/peersafe/aiwan/fabric/chaincode"
 CCPACKAGE="factor.out"
 INITARGS='{"Args":["init","a","100","b","200"]}'
 TESTARGS='{"Args":["query","a"]}'
 TESTARGS='{"Args":["invoke","a","b","1"]}'
+TESTARGS='{"Args":["RegisterUser","b","1"]}'
 #TESTARGS='{"Args":["DslQuery","trackid","{\"dslSyntax\":\"{\\\"selector\\\":{\\\"sender\\\":\\\"zhengfu0\\\"}}\"}"]}'
 
 ORDERER_CA="$PWD/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
