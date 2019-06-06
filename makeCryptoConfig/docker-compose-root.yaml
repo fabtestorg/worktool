@@ -12,17 +12,16 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
     ports:
       - "7055:7054"
-    command: sh -c 'fabric-ca-server start -b Admin@example.com:adminpw -d'
+    command: sh -c 'fabric-ca-server start -b Admin@example.com:adminpw --csr.cn ca.example.com -d'
     volumes:
       - ./server/example.com:/etc/hyperledger/fabric-ca-server
-
   org1ca:
     image: hyperledger/fabric-ca
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
     ports:
       - "7056:7054"
-    command: sh -c 'fabric-ca-server start -b Admin@org1.example.com:adminpw  -d'
+    command: sh -c 'fabric-ca-server start -b Admin@org1.example.com:adminpw --csr.cn ca.org1.example.com -d'
     volumes:
       - ./server/org1.example.com:/etc/hyperledger/fabric-ca-server
 
@@ -32,6 +31,6 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
     ports:
       - "7057:7054"
-    command: sh -c 'fabric-ca-server start -b Admin@org2.example.com:adminpw -d'
+    command: sh -c 'fabric-ca-server start -b Admin@org2.example.com:adminpw --csr.cn ca.org2.example.com -d'
     volumes:
       - ./server/org2.example.com:/etc/hyperledger/fabric-ca-server
