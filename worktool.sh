@@ -21,16 +21,16 @@ TEMPID=$3
 
 CHANNEL_NAME="mychannel"
 #如果是动态增加channel，请将CHANNEL_NAME的变量设置为"channel1"
-CCNAME="factor"
+CCNAME="mycc"
 CCVERSION=$2
 CCPATH="github.com/hyperledger/fabric/examples/chaincode/go/example02/cmd"
 #CCPATH="github.com/peersafe/factoring/chaincode"
-CCPATH="github.com/peersafe/aiwan/fabric/chaincode"
+#CCPATH="github.com/peersafe/aiwan/fabric/chaincode"
 CCPACKAGE="factor.out"
 INITARGS='{"Args":["init","028F784A59660275B3E8FA28D921ABF24E7DF38F60716AF085DAD55793977358C4","100","b","200"]}'
-TESTARGS='{"Args":["query","a"]}'
-TESTARGS='{"Args":["invoke","a","b","1"]}'
-TESTARGS='{"Args":["RegisterUser","b","1"]}'
+TESTARGS='{"Args":["query","b"]}'
+#TESTARGS='{"Args":["invoke","a","b","1"]}'
+#TESTARGS='{"Args":["RegisterUser","b","1"]}'
 #TESTARGS='{"Args":["DslQuery","trackid","{\"dslSyntax\":\"{\\\"selector\\\":{\\\"sender\\\":\\\"zhengfu0\\\"}}\"}"]}'
 
 ORDERER_CA="$PWD/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
@@ -95,7 +95,7 @@ setGlobals () {
 
     echo "*******************all peer join channel*************************"
 
-    for ch in 0; do
+    for ch in 0 2; do
         setGlobals $ch
         $PEER channel join -b $CHANNEL_NAME.block
         echo "===================== PEER$ch joined on the channel \"$CHANNEL_NAME\" ===================== "
@@ -103,7 +103,7 @@ setGlobals () {
         echo
     done
     echo "*****************org1 and org2  update anchorPeer**************"
-    for ch in 0; do
+    for ch in 0 2; do
         setGlobals $ch
         if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
             $PEER channel update -o $ORDERADDRESS -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx
@@ -131,7 +131,7 @@ setGlobals () {
     $PEER chaincode package -n $CCNAME -p $CCPATH -v $CCVERSION $CCPACKAGE
 
     echo "******************all peers install chaincode by package method***********"
-    for ch in 0; do
+    for ch in 0 2; do
        setGlobals $ch
         $PEER chaincode install $CCPACKAGE
         echo "===================== PEER$ch install ===================== "
@@ -225,7 +225,7 @@ exit
         exit 1
 	fi
     setGlobals 0
-    #$PEER chaincode query -C $CHANNEL_NAME -n $CCNAME -c $TESTARGS
+  #  $PEER chaincode query -C $CHANNEL_NAME -n $CCNAME -c $TESTARGS
     if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
         $PEER chaincode invoke -o $ORDERADDRESS -C $CHANNEL_NAME -n $CCNAME -c $TESTARGS
     else
