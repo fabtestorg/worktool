@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #set -x
+NODES=(0 2)
 CORE_PEER_TLS_ENABLED=true
 ORG1_PEER0="127.0.0.1:7051"
 ORG1_PEER1="127.0.0.1:8051"
@@ -95,7 +96,7 @@ setGlobals () {
 
     echo "*******************all peer join channel*************************"
 
-    for ch in 0 2; do
+    for ch in ${NODES[*]}; do
         setGlobals $ch
         $PEER channel join -b $CHANNEL_NAME.block
         echo "===================== PEER$ch joined on the channel \"$CHANNEL_NAME\" ===================== "
@@ -103,7 +104,7 @@ setGlobals () {
         echo
     done
     echo "*****************org1 and org2  update anchorPeer**************"
-    for ch in 0 2; do
+    for ch in ${NODES[*]}; do
         setGlobals $ch
         if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
             $PEER channel update -o $ORDERADDRESS -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx
@@ -131,7 +132,7 @@ setGlobals () {
     $PEER chaincode package -n $CCNAME -p $CCPATH -v $CCVERSION $CCPACKAGE
 
     echo "******************all peers install chaincode by package method***********"
-    for ch in 0 2; do
+    for ch in ${NODES[*]}; do
        setGlobals $ch
         $PEER chaincode install $CCPACKAGE
         echo "===================== PEER$ch install ===================== "
@@ -150,19 +151,17 @@ setGlobals () {
 #    done
 #
 #    echo "*******************instantiate chaincode only need one org*********************"
-    setGlobals 0
-    if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
-        $PEER chaincode instantiate -o $ORDERADDRESS -C $CHANNEL_NAME -n $CCNAME -v $CCVERSION -c $INITARGS -P "$POLICY"
-    else
-        $PEER chaincode instantiate -o $ORDERADDRESS  --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n $CCNAME -v $CCVERSION -c $INITARGS -P "$POLICY"
-    fi
-exit
-    # query
-    echo "******************sleep 5 test*************"
-    sleep 5
+    for ch in ${NODES[*]}; do
+        setGlobals $ch
+        if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
+            $PEER chaincode instantiate -o $ORDERADDRESS -C $CHANNEL_NAME -n $CCNAME -v $CCVERSION -c $INITARGS -P "$POLICY"
+        else
+           $PEER chaincode instantiate -o $ORDERADDRESS  --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n $CCNAME -v $CCVERSION -c $INITARGS -P "$POLICY"
+        fi
+        echo "===================== PEER$ch instantiate ===================== "
+    done
     echo "***************test is chaincode depoly success!********************"
-    setGlobals 0
-    $PEER chaincode query -C $CHANNEL_NAME -n $CCNAME -c $TESTARGS
+    #$PEER chaincode query -C $CHANNEL_NAME -n $CCNAME -c $TESTARGS
 }
 
 3_Upgrade () {
@@ -191,7 +190,7 @@ exit
 #    done
     # from code
     echo "all peers install chaincode by path method"
-    for ch in 0; do
+    for ch in ${NODES[*]}; do
         setGlobals $ch
         $PEER chaincode install -n $CCNAME -v $CCVERSION -p $CCPATH
         echo "===================== PEER$ch install ===================== "
@@ -200,20 +199,15 @@ exit
     done
 
     echo "*********************upgrade chaincode ******************"
-    setGlobals 0
-    if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
-        $PEER chaincode upgrade -o $ORDERADDRESS -C $CHANNEL_NAME -n $CCNAME -v $CCVERSION -c $INITARGS -P "$POLICY"
-    else
-        $PEER chaincode upgrade -o $ORDERADDRESS -C $CHANNEL_NAME -n $CCNAME -v $CCVERSION -c $INITARGS -P "$POLICY" --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA
-    fi
-
-exit
-    # query
-    echo "sleep 5 test"
-    sleep 5
+    for ch in ${NODES[*]}; do
+        setGlobals $ch
+        if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
+            $PEER chaincode upgrade -o $ORDERADDRESS -C $CHANNEL_NAME -n $CCNAME -v $CCVERSION -c $INITARGS -P "$POLICY"
+        else
+           $PEER chaincode upgrade -o $ORDERADDRESS  --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n $CCNAME -v $CCVERSION -c $INITARGS -P "$POLICY"
+        fi
+    done
     echo "test is chaincode depoly success!"
-    setGlobals 0
-    $PEER chaincode query -C $CHANNEL_NAME -n $CCNAME -c $TESTARGS
 }
 
 4_Test () {
