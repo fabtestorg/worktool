@@ -37,11 +37,19 @@ TESTARGS='{"Args":["query","b"]}'
 ORDERER_CA="$PWD/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
 POLICY="OR  ('Org1MSP.peer','Org2MSP.peer')"
 
-#peer 需要用到的依赖
-PEER=$PWD/bin/peer
-#PEER=$PWD/gm-bin/peer
+BINPATH=$PWD/bin  #set by yourself
+BINPATH=$(which peer | xargs dirname)
+PEER=$BINPATH/peer
 export FABRIC_CFG_PATH=$PWD
 
+echo "=================== NOTICE ==================="
+LOCAL_VERSION=$($PEER version | sed -ne 's/ Version: //p'| head -1)
+echo "============Local ENV Version $LOCAL_VERSION============"
+echo "============BINPATH=$BINPATH============"
+echo "==============================================="
+if [[ "$0" =~ "gene" ]]; then
+    return
+fi
 setGlobals () {
     if [ $1 -eq 0 -o $1 -eq 1 ] ; then
     CORE_PEER_LOCALMSPID="Org1MSP"
@@ -267,7 +275,7 @@ setGlobals () {
     echo $CHANNEL_NAME
     $PEER channel fetch newest ${CHANNEL_NAME}_block.pb -o $ORDERADDRESS -c $CHANNEL_NAME --tls --cafile $ORDERER_CA
 }
-echo
+
 echo "#################################################################"
 echo "#######    TLS is $CORE_PEER_TLS_ENABLED   ##########"
 echo "#################################################################"

@@ -5,9 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-
 #set -e
-
 CHANNEL_NAME=$1
 : ${CHANNEL_NAME:="mychannel"}
 CONSENSUS_TYPE=$2
@@ -20,8 +18,9 @@ export FABRIC_ROOT=$PWD
 export FABRIC_CFG_PATH=$PWD
 echo
 
-BINPATH=$PWD/bin
-#BINPATH=$PWD/gm-bin
+# import env
+. worktool.sh
+
 CRYPTOGEN=$BINPATH/cryptogen
 CONFIGTXGEN=$BINPATH/configtxgen
 
@@ -41,7 +40,7 @@ function generateCerts (){
 	echo "##########################################################"
 	$CRYPTOGEN generate --config=./crypto-config.yaml
 #        echo "##########################################################"
-#        $CRYPTOGEN showtemplate 
+#        $CRYPTOGEN showtemplate
 #        echo "##########################################################"
 #        $CRYPTOGEN version
 #	echo
