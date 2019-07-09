@@ -14,8 +14,8 @@ services:
       # bridge network as the peers
       # https://docs.docker.com/compose/networking/
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=worktool_default
-      #- FABRIC_LOGGING_SPEC=INFO
-      - FABRIC_LOGGING_SPEC=orderer.common.cluster.step=info:orderer.consensus.etcdraft=info:debug
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_TLS_ENABLED=true
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_GOSSIP_ORGLEADER=false
