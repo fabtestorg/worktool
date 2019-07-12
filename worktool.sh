@@ -41,10 +41,11 @@ BINPATH=$PWD/bin  #set by yourself
 BINPATH=$(which peer | xargs dirname)
 PEER=$BINPATH/peer
 export FABRIC_CFG_PATH=$PWD
-
+export BCCSP_CRYPTO_TYPE=GM
 echo "=================== NOTICE ==================="
 LOCAL_VERSION=$($PEER version | sed -ne 's/ Version: //p'| head -1)
 echo "============Local ENV Version $LOCAL_VERSION============"
+echo "============BCCSP CRYPTO TYPE Version $BCCSP_CRYPTO_TYPE============"
 echo "============BINPATH=$BINPATH============"
 echo "==============================================="
 if [[ "$0" =~ "gene" ]]; then
