@@ -114,6 +114,9 @@ setGlobals () {
     done
     echo "*****************org1 and org2  update anchorPeer**************"
     for ch in ${NODES[*]}; do
+        if [ $(( $ch % 2 )) != 0 ]; then
+            continue
+        fi
         setGlobals $ch
         if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
             $PEER channel update -o $ORDERADDRESS -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx
